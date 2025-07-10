@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,7 +8,7 @@
       margin: 0;
       padding: 0;
       background-color: #0a0a1a;
-      color: #ccc;
+      color: #00008b; /* azul escuro profundo */
       font-family: monospace;
       font-size: 12px;
       line-height: 1.6;
@@ -57,7 +56,7 @@
 
     input {
       background: transparent;
-      color: #fff;
+      color: #00008b;
       border: 1px solid #555;
       padding: 5px;
       width: 200px;
@@ -76,9 +75,7 @@
     }
 
     audio {
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
+      display: none;
     }
   </style>
 </head>
@@ -100,9 +97,8 @@
     </div>
   </div>
 
-  <audio autoplay loop>
-    <source src="Watchers-Mind.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
+  <audio id="bg-audio" autoplay loop>
+    <source src="Watchers-mind.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -118,6 +114,16 @@
         alert("Chave incorreta.");
       }
     }
+
+    // Tentativa de garantir autoplay (alguns navegadores bloqueiam sem interação)
+    window.addEventListener('click', () => {
+      const audio = document.getElementById('bg-audio');
+      if (audio.paused) {
+        audio.play().catch(e => {
+          console.log("Autoplay bloqueado até interação.");
+        });
+      }
+    });
   </script>
 </body>
 </html>
