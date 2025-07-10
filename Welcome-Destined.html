@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>+OTSSPASESE+</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0a0a1a;
+      color: #ccc;
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-image: url('bg_img-Blue.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .centered {
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+      background-color: rgba(10, 10, 26, 0.8);
+      border: 1px solid #333;
+      box-shadow: 0 0 15px #111;
+    }
+
+    h1, h2 {
+      color: #cc0000;
+      font-size: 14px;
+    }
+
+    .purple {
+      color: #9400d3;
+    }
+
+    .tiny-img {
+      margin-top: 20px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    #inputSection {
+      display: none;
+      margin-top: 10px;
+    }
+
+    input {
+      background: transparent;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 5px;
+      width: 200px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #0a0a1a;
+      border: 1px solid #9400d3;
+      color: #9400d3;
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    audio {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="centered">
+    <h1>Eu sei quem você é, DESTINADO.</h1>
+    <h2>+ Bem Vindo +</h2>
+
+    <p class="purple">+OTSSPASESE+</p>
+    <p>"A resposta está nos sons dos degraus. Mas não conte quantos — ouça o que são."</p>
+    <p>"Cada som repetido guarda a resposta da chave."</p>
+    <p>"A chave começa com S e termina com S."</p>
+
+    <img src="zz.gif" alt="símbolo" class="tiny-img" onclick="revealInput()" />
+
+    <div id="inputSection">
+      <input type="text" id="codeInput" placeholder="Digite a chave">
+      <button onclick="checkCode()">Enviar</button>
+    </div>
+  </div>
+
+  <audio autoplay loop>
+    <source src="Watchers-Mind.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    function revealInput() {
+      document.getElementById('inputSection').style.display = 'block';
+    }
+
+    function checkCode() {
+      const input = document.getElementById('codeInput').value.trim().toUpperCase();
+      if (input === 'SETEPASSOS') {
+        window.location.href = "transmission.html";
+      } else {
+        alert("Chave incorreta.");
+      }
+    }
+  </script>
+</body>
+</html>
