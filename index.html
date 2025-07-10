@@ -8,7 +8,7 @@
       margin: 0;
       padding: 0;
       background-color: #0a0a1a;
-      color: #00008b; /* azul escuro profundo */
+      color: #00008b;
       font-family: monospace;
       font-size: 12px;
       line-height: 1.6;
@@ -21,6 +21,7 @@
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
+      text-shadow: 0 0 1px #ccc; /* melhora legibilidade */
     }
 
     .centered {
@@ -35,6 +36,7 @@
     h1, h2 {
       color: #cc0000;
       font-size: 14px;
+      text-shadow: none;
     }
 
     .purple {
@@ -62,6 +64,7 @@
       width: 200px;
       font-size: 12px;
       text-align: center;
+      text-shadow: 0 0 1px #ccc;
     }
 
     button {
@@ -89,7 +92,7 @@
     <p>"Cada som repetido guarda a resposta da chave."</p>
     <p>"A chave começa com S e termina com S."</p>
 
-    <img src="zz.gif" alt="símbolo" class="tiny-img" onclick="revealInput()" />
+    <img src="zz.gif" alt="símbolo" class="tiny-img" onclick="startAudioAndReveal()" />
 
     <div id="inputSection">
       <input type="text" id="codeInput" placeholder="Digite a chave">
@@ -97,12 +100,17 @@
     </div>
   </div>
 
-  <audio id="bg-audio" autoplay loop>
+  <audio id="bg-audio" loop>
     <source src="Watchers-mind.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
   </audio>
 
   <script>
-    function revealInput() {
+    function startAudioAndReveal() {
+      const audio = document.getElementById('bg-audio');
+      audio.play().catch(() => {
+        console.log("Autoplay ainda bloqueado, tente interagir.");
+      });
       document.getElementById('inputSection').style.display = 'block';
     }
 
@@ -114,16 +122,6 @@
         alert("Chave incorreta.");
       }
     }
-
-    // Tentativa de garantir autoplay (alguns navegadores bloqueiam sem interação)
-    window.addEventListener('click', () => {
-      const audio = document.getElementById('bg-audio');
-      if (audio.paused) {
-        audio.play().catch(e => {
-          console.log("Autoplay bloqueado até interação.");
-        });
-      }
-    });
   </script>
 </body>
 </html>
