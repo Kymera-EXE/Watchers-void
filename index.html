@@ -7,8 +7,8 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #0a0a1a;
-      color: #00008b;
+      background-color: #000000; /* Fundo preto absoluto */
+      color: #0000ff; /* Azul forte */
       font-family: monospace;
       font-size: 12px;
       line-height: 1.6;
@@ -21,20 +21,20 @@
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      text-shadow: 0 0 1px #ccc; /* melhora legibilidade */
+      text-shadow: none; /* Remove a sombra branca */
     }
 
     .centered {
       text-align: center;
       max-width: 600px;
       padding: 20px;
-      background-color: rgba(10, 10, 26, 0.8);
+      background-color: rgba(0, 0, 0, 0.85); /* Fundo escuro semi-transparente para contraste */
       border: 1px solid #333;
       box-shadow: 0 0 15px #111;
     }
 
     h1, h2 {
-      color: #cc0000;
+      color: #cc0000; /* Vermelho */
       font-size: 14px;
       text-shadow: none;
     }
@@ -48,7 +48,7 @@
       width: 40px;
       height: 40px;
       cursor: pointer;
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
     #inputSection {
@@ -58,17 +58,16 @@
 
     input {
       background: transparent;
-      color: #00008b;
+      color: #0000ff;
       border: 1px solid #555;
       padding: 5px;
       width: 200px;
       font-size: 12px;
       text-align: center;
-      text-shadow: 0 0 1px #ccc;
     }
 
     button {
-      background-color: #0a0a1a;
+      background-color: #000000;
       border: 1px solid #9400d3;
       color: #9400d3;
       padding: 4px 10px;
@@ -100,7 +99,7 @@
     </div>
   </div>
 
-  <audio id="bg-audio" loop>
+  <audio id="bg-audio" loop muted>
     <source src="Watchers-mind.mp3" type="audio/mpeg">
     Seu navegador não suporta áudio.
   </audio>
@@ -108,8 +107,9 @@
   <script>
     function startAudioAndReveal() {
       const audio = document.getElementById('bg-audio');
-      audio.play().catch(() => {
-        console.log("Autoplay ainda bloqueado, tente interagir.");
+      audio.muted = false;
+      audio.play().catch(err => {
+        console.log("Erro ao tocar áudio:", err);
       });
       document.getElementById('inputSection').style.display = 'block';
     }
