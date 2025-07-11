@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>17h17m17s</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #glitch-img {
+      width: auto;
+      height: auto;
+      max-width: 90vw;
+      max-height: 90vh;
+      cursor: pointer;
+      animation: subtle-glitch 1s infinite alternate;
+      filter: hue-rotate(130deg) saturate(150%) brightness(0.9); /* Verde-marinho */
+    }
+
+    @keyframes subtle-glitch {
+      0% {
+        transform: translate(0, 0);
+        filter: hue-rotate(130deg) saturate(150%) brightness(0.9);
+      }
+      50% {
+        transform: translate(0.5px, -0.3px);
+        filter: hue-rotate(130deg) saturate(150%) brightness(1);
+      }
+      100% {
+        transform: translate(0, 0);
+        filter: hue-rotate(130deg) saturate(150%) brightness(0.9);
+      }
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <img id="glitch-img" src="induced-fear.gif" alt="Induced Fear" />
+
+  <audio id="fear-audio">
+    <source src="fear.wav" type="audio/wav">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    const gif = document.getElementById("glitch-img");
+    const audio = document.getElementById("fear-audio");
+
+    gif.addEventListener("click", () => {
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    });
+  </script>
+</body>
+</html>
