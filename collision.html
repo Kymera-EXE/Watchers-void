@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>COLLISION</title>
+
+  <!-- =======================
+       Estilos CSS
+  ======================= -->
+  <style>
+    /* Reset e layout base */
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100vh;
+      background: #000;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      font-family: monospace;
+      color: #0c1d3c; /* Texto em azul escuro */
+    }
+
+    /* Container do símbolo com posição relativa */
+    #symbol-container {
+      position: relative;
+      max-width: 90vw; max-height: 70vh;
+    }
+
+    /* Classe base do símbolo (glitch forte, derretendo) */
+    .symbol {
+      width: 100%; height: auto;
+      animation: melt-glitch 2s infinite ease-in-out;
+      filter: hue-rotate(210deg) brightness(0.9);
+    }
+
+    /* Keyframes para o efeito de “derretimento” */
+    @keyframes melt-glitch {
+      0%   { transform: translateY(0) scaleY(1); }
+      50%  { transform: translateY(2px) scaleY(1.02); }
+      100% { transform: translateY(4px) scaleY(1.05); }
+    }
+
+    /* Quando o símbolo fica “flutuando” */
+    .floating {
+      animation:
+        float 2s infinite alternate ease-in-out,
+        subtle-glitch 1s infinite alternate;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-5px); }
+    }
+    @keyframes subtle-glitch {
+      0%   { filter: hue-rotate(270deg) contrast(120%); }
+      50%  { filter: hue-rotate(275deg) contrast(130%) saturate(120%); }
+      100% { filter: hue-rotate(270deg) contrast(120%); }
+    }
+
+    /* Texto abaixo do símbolo */
+    #text {
+      margin-top: 30px;
+      font-size: 14px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* GIF final, inicialmente escondido */
+    #glitch-gif {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      filter: hue-rotate(250deg) saturate(80%);
+      z-index: 99;
+    }
+
+    /* Zona clicável central invisível */
+    #click-zone {
+      position: absolute;
+      width: 80px; height: 80px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    /* Esconde elemento de áudio */
+    audio { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- =======================
+       HTML Estruturado
+  ======================= -->
+  <div id="symbol-container">
+    <!-- Símbolo inicial -->
+    <img
+      id="symbol-img"
+      src="Infinite-House.png"
+      class="symbol"
+      alt="Símbolo Infinite House"
+    />
+    <!-- Área clique no centro -->
+    <div id="click-zone"></div>
+  </div>
+
+  <!-- Mensagem fixa abaixo do símbolo -->
+  <div id="text">
+    Essa é sua casa....Nossa casa.<br />
+    ESTAMOS NO CENTRO DELA AGORA
+  </div>
+
+  <!-- GIF “a_possibility” que surge no segundo clique -->
+  <img
+    id="glitch-gif"
+    src="a_possibility.gif"
+    alt="Possibility GIF"
+  />
+
+  <!-- Áudio que toca a partir do primeiro clique -->
+  <audio id="collision-audio">
+    <source src="thecenterofthecollision.mp3" type="audio/mpeg" />
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <!-- =======================
+       Script JavaScript
+  ======================= -->
+  <script>
+    (function() {
+      const clickZone = document.getElementById('click-zone');
+      const symbolImg = document.getElementById('symbol-img');
+      const glitchGif  = document.getElementById('glitch-gif');
+      const audio      = document.getElementById('collision-audio');
+      let clickCount = 0;
+
+      clickZone.addEventListener('click', () => {
+        clickCount++;
+
+        if (clickCount === 1) {
+          // 1º clique: troca p/ símbolo roxo + inicia áudio
+          symbolImg.src = 'Paradise-Colision.png';
+          symbolImg.classList.remove('symbol');
+          symbolImg.classList.add('floating');
+          audio.volume = 0.5;
+          audio.play().catch(() => {});
+        }
+        else if (clickCount === 2) {
+          // 2º clique: exibe GIF bizarro + aumenta volume + fecha aba
+          glitchGif.style.display = 'block';
+          audio.volume = 1.0;
+
+          // Aguarda 2.5s e tenta fechar
+          setTimeout(() => {
+            window.open('', '_self');
+            window.close();
+          }, 2500);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
