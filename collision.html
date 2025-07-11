@@ -26,16 +26,16 @@
       height: 100%;
     }
 
-    /* Símbolo azul (#8585D8) com leve efeito de derretimento */
+    /* Símbolo azul com glitch leve */
     .symbol {
       max-width: 60vw;
       max-height: 80vh;
       filter: saturate(1.3) brightness(1.1) contrast(1.1);
-      animation: melt-down 2s infinite ease-in-out;
+      animation: subtle-glitch 1.2s infinite alternate;
       cursor: pointer;
     }
 
-    /* Segundo símbolo roxo com flutuação e glitch */
+    /* Símbolo roxo com flutuação e glitch */
     .second-symbol {
       width: 415px;
       height: 750px;
@@ -79,27 +79,16 @@
       display: none;
     }
 
-    /* Efeito de derretimento fluído */
-    @keyframes melt-down {
-      0%   { transform: translateY(0px) scaleY(1); }
-      25%  { transform: translateY(2px) scaleY(1.02); }
-      50%  { transform: translateY(4px) scaleY(1.03); }
-      75%  { transform: translateY(6px) scaleY(1.05); }
-      100% { transform: translateY(3px) scaleY(1.01); }
-    }
-
-    /* Flutuação suave */
     @keyframes float {
       0%   { transform: translateY(0px); }
       50%  { transform: translateY(-4px); }
       100% { transform: translateY(0px); }
     }
 
-    /* Glitch sutil no símbolo roxo */
     @keyframes subtle-glitch {
-      0%   { filter: brightness(0.95) hue-rotate(275deg) saturate(1.2); }
-      50%  { filter: brightness(1) hue-rotate(280deg) saturate(1.3); }
-      100% { filter: brightness(0.95) hue-rotate(275deg) saturate(1.2); }
+      0%   { filter: brightness(1.05) hue-rotate(270deg); }
+      50%  { filter: brightness(0.95) hue-rotate(280deg); }
+      100% { filter: brightness(1.05) hue-rotate(270deg); }
     }
   </style>
 </head>
@@ -136,25 +125,24 @@
         if (activated) return;
         activated = true;
 
-        // Troca para símbolo roxo
+        // Troca símbolo
         symbolImg.src = 'Paradise-Colision.png';
         symbolImg.classList.remove('symbol');
         symbolImg.classList.add('second-symbol');
         text.style.display = 'none';
 
-        // Inicia o áudio
+        // Inicia áudio
         audio.currentTime = 0;
         audio.play().catch(() => {});
 
-        // Aos 70s (01:10) exibe o GIF
+        // Após 70s → exibe GIF
         setTimeout(() => {
           glitchGif.style.display = 'block';
           audio.volume = 1.0;
 
-          // Após 3s fecha a aba
+          // Após 3s → redireciona para página que fecha
           setTimeout(() => {
-            window.open('', '_self');
-            window.close();
+            window.location.href = 'close.html';
           }, 3000);
         }, 70000);
       });
