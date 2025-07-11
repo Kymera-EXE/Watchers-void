@@ -27,9 +27,9 @@
     }
 
     @keyframes subtle-glitch {
-      0%   { text-shadow: 0 0 0.3px #cc0000; transform: translate(0, 0); }
-      50%  { text-shadow: 0.5px 0.5px 1px #cc0000; transform: translate(0.2px, -0.2px); }
-      100% { text-shadow: 0 0 0.3px #cc0000; transform: translate(0, 0); }
+      0%   { text-shadow: 0 0 0.5px #cc0000; transform: translate(0, 0); }
+      50%  { text-shadow: 1px 0.5px 1.5px #cc0000; transform: translate(0.3px, -0.2px); }
+      100% { text-shadow: 0 0 0.5px #cc0000; transform: translate(0, 0); }
     }
 
     .char {
@@ -45,15 +45,14 @@
 
     a {
       color: #cc0000;
-      text-decoration: none;
+      text-decoration: underline;
     }
 
     #hidden-link {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      font-size: 4px;
-      opacity: 0.01;
+      color: #000;
+      font-size: 6px;
+      text-decoration: none;
+      user-select: text;
     }
 
     audio {
@@ -64,7 +63,7 @@
 <body>
   <div id="content">
     <div id="text-container"></div>
-    <a id="hidden-link" href="collision.html">.</a>
+    <div id="hidden-link"><a href="collision.html">Collision</a></div>
   </div>
 
   <audio id="bg-audio" autoplay loop>
@@ -94,7 +93,6 @@ Eu sempre ficava ali, olhando tudo em silêncio.
         const span = document.createElement("span");
         span.classList.add("char");
 
-        // Se encontrar <a ...> insere direto como HTML
         if (rawText[i] === '<') {
           const end = rawText.indexOf('>', i) + 1;
           const tag = rawText.slice(i, end);
