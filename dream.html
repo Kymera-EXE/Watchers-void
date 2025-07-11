@@ -48,11 +48,13 @@
       text-decoration: underline;
     }
 
+    /* Link oculto */
     #hidden-link {
       color: #000;
-      font-size: 6px;
-      text-decoration: none;
-      user-select: text;
+      font-size: 1px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
     }
 
     audio {
@@ -63,7 +65,9 @@
 <body>
   <div id="content">
     <div id="text-container"></div>
-    <div id="hidden-link"><a href="collision.html">Collision</a></div>
+    <div id="hidden-link">
+      <a href="collision.html">Collision</a>
+    </div>
   </div>
 
   <audio id="bg-audio" autoplay loop>
@@ -78,12 +82,7 @@ Uma coruja negra, imóvel, com olhos vermelhos e uma cruz vermelha desenhada no 
 Um cachorro grande, assustador, mas solitário. Tinha chifres bem tortos e olhos queimados por ácido.
 Um gavião albino, com os olhos preto como o vazio, e as pontas das asas escurecidas como carvão.
 Um coelho preto, com o rosto todo escuro menos os olhos — círculos brancos ao redor, como se estivesse sempre chorando.
-Um gato Siames, tinha 6 patas e estava sentado como um rei, olhos vermelhos fixos em mim, e um relógio como coleira, marcando <a href="171717.html">17h17m17s</a>.
-Um morcego de quatro asas, pendurado no altar, dormindo. Mas sei que ele me via.
-E um corvo vermelho, tinha duas cabeças, uma grasnava sem parar e a outra me encarava, como se soubesse quem eu sou.
-No centro, o broto de uma árvore, com folhas douradas. Brilhava como se o resto da sala não existisse.
-Eu sempre ficava ali, olhando tudo em silêncio.
-`;
+Um gato Siames, tinha 6 patas e estava sentado como um rei, olhos vermelhos fixos em mim, e um relógio como coleira, marcando`;
 
     const container = document.getElementById("text-container");
     let i = 0;
@@ -93,23 +92,21 @@ Eu sempre ficava ali, olhando tudo em silêncio.
         const span = document.createElement("span");
         span.classList.add("char");
 
-        if (rawText[i] === '<') {
-          const end = rawText.indexOf('>', i) + 1;
-          const tag = rawText.slice(i, end);
-          container.innerHTML += tag;
-          i = end;
-          setTimeout(typeChar, 10);
-        } else {
-          span.innerHTML = rawText[i] === '\n' ? '<br>' : rawText[i];
-          container.appendChild(span);
-          i++;
-          setTimeout(typeChar, 10);
-        }
+        span.innerHTML = rawText[i] === '\n' ? '<br>' : rawText[i];
+        container.appendChild(span);
+        i++;
+        setTimeout(typeChar, 10);
+      } else {
+        // Adiciona o link após digitação completa
+        const finalLine = document.createElement("div");
+        finalLine.innerHTML = ` <a href="171717.html" style="color:#cc0000; text-decoration:underline;">17h17m17s</a>.`;
+        container.appendChild(finalLine);
       }
     }
 
     window.onload = typeChar;
 
+    // Permitir autoplay no mobile após interação
     window.addEventListener('click', () => {
       const audio = document.getElementById('bg-audio');
       if (audio.paused) {
