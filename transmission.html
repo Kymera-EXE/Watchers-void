@@ -6,41 +6,59 @@
   <style>
     body {
       margin: 0;
-      padding: 40px;
-      background-color: #000000;
+      padding: 0;
+      background-color: #000;
       color: #00008b;
       font-family: monospace;
       font-size: 12px;
-      line-height: 1.6;
-      text-shadow: 0 0 1px #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #content {
+      max-width: 700px;
+      padding: 20px;
+      text-align: left;
       white-space: pre-wrap;
+      line-height: 1.6;
+      animation: subtle-glitch 1s infinite alternate;
     }
 
-    .typewriter-line {
-      visibility: hidden;
+    @keyframes subtle-glitch {
+      0%   { text-shadow: 0 0 0.3px #ccc; transform: translate(0, 0); }
+      50%  { text-shadow: 0.5px 0.5px 1px #9400d3; transform: translate(0.2px, -0.2px); }
+      100% { text-shadow: 0 0 0.3px #ccc; transform: translate(0, 0); }
     }
 
-    .purple {
-      color: #9400d3;
+    .char {
+      opacity: 0;
+      animation: appear 0.5s forwards;
     }
 
-    .red {
-      color: #cc0000;
+    @keyframes appear {
+      to {
+        opacity: 1;
+      }
     }
+
+    .purple { color: #9400d3; }
+    .red { color: #cc0000; }
 
     button {
-      background-color: #000000;
+      background-color: #000;
       border: 1px solid #9400d3;
       color: #9400d3;
       padding: 4px 10px;
       font-size: 11px;
       cursor: pointer;
       margin: 5px;
-      display: inline-block;
+      margin-top: 15px;
     }
 
-    #revealSection {
-      display: none;
+    #buttons, #revealSection {
       margin-top: 20px;
     }
 
@@ -51,21 +69,14 @@
 </head>
 <body>
   <div id="content">
-    <div class="typewriter-line">///---=== TRANSMISSION RECEIVED ===---\\\</div>
-    <div class="typewriter-line">ID: A-∴-VIGIA-77</div>
-    <div class="typewriter-line"> </div>
-    <div class="typewriter-line">Sinal: ♁ 14°52’N, 75°03’E</div>
-    <div class="typewriter-line">Frequência de ruído: Estável</div>
-    <div class="typewriter-line">Anomalia Observada: “SELETORES REM”</div>
-    <div class="typewriter-line">Registros Comprometidos: Ricardo_00 / Isabela_Δ / Alex_Σ</div>
-    <div class="typewriter-line"> </div>
-    <div class="typewriter-line">Status: [AGUARDANDO AUTORIZAÇÃO DE DESCIDA]</div>
-    <div class="typewriter-line purple">Prosseguir?</div>
+    <div id="text-container"></div>
+
     <div id="buttons" style="display:none;">
       <button onclick="deny()">N</button>
       <button onclick="reveal()">Y</button>
     </div>
-    <div id="revealSection">
+
+    <div id="revealSection" style="display:none;">
       <p class="red">[NOME INACESSÍVEL]</p>
       <p>⚠ Este canal está sob proteção do Protocolo W-A-T</p>
       <p>⚠ Rastreamento de origens cognitivas em andamento...</p>
@@ -80,31 +91,53 @@
   </audio>
 
   <script>
-    // Força áudio com interação
+    const lines = [
+      "///---=== TRANSMISSION RECEIVED ===---\\\\\\n",
+      "ID: A-∴-VIGIA-77\\n",
+      "Sinal: ♁ 14°52’N, 75°03’E",
+      "Frequência de ruído: Estável",
+      "Anomalia Observada: “SELETORES REM”",
+      "Registros Comprometidos: Ricardo_00 / Isabela_Δ / Alex_Σ",
+      "",
+      "Status: [AGUARDANDO AUTORIZAÇÃO DE DESCIDA]",
+      "+ Prosseguir? +"
+    ];
+
+    const container = document.getElementById("text-container");
+    let lineIndex = 0, charIndex = 0;
+
+    function typeWriter() {
+      if (lineIndex >= lines.length) {
+        document.getElementById("buttons").style.display = "block";
+        return;
+      }
+
+      const currentLine = lines[lineIndex];
+      if (charIndex < currentLine.length) {
+        const span = document.createElement("span");
+        span.classList.add("char");
+        span.style.animationDelay = "0s";
+        span.textContent = currentLine[charIndex] === '\\n' ? '\\n' : currentLine[charIndex];
+        container.appendChild(span);
+        charIndex++;
+        setTimeout(typeWriter, 20);
+      } else {
+        container.appendChild(document.createElement("br"));
+        lineIndex++;
+        charIndex = 0;
+        setTimeout(typeWriter, 100);
+      }
+    }
+
+    window.onload = typeWriter;
+
+    // Áudio autoplay workaround
     window.addEventListener('click', () => {
       const audio = document.getElementById('bg-audio');
       if (audio.paused) {
         audio.play().catch(() => {});
       }
     });
-
-    // Efeito de digitação linha por linha
-    const lines = document.querySelectorAll(".typewriter-line");
-    let index = 0;
-
-    function showLine() {
-      if (index < lines.length) {
-        lines[index].style.visibility = "visible";
-        index++;
-        setTimeout(showLine, 200); // velocidade da digitação
-      } else {
-        document.getElementById("buttons").style.display = "block";
-      }
-    }
-
-    window.onload = () => {
-      showLine();
-    };
 
     function reveal() {
       document.getElementById("revealSection").style.display = "block";
