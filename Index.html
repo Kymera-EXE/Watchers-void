@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>+OTSSPASESE+</title>
+  <style>
+    /* O termo "Body Body" não existe. É só "Body": */
+    body {
+      height: 100%; /* "height" se usa porcentagem("%"), Não "vh"*/
+      min-height: 100vh; /* Centraliza o tamanho mínimo */
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      background-image: url('bg_img-Blue.png'); /* Atenção, mantive porque não sei como estão seus diretórios. Lembresse de colocar o caminho completo das pastas */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #0000ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .centered {
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.85); /* Fundo escuro semi-transparente para porra do contraste */
+      border: 1px solid #333;
+      box-shadow: 0 0 15px #111;
+    }
+
+    h1, h2 {
+      color: #cc0000; /* Vermelho */
+      font-size: 14px;
+      text-shadow: none;
+    }
+
+    .purple {
+      color: #9400d3;
+    }
+
+    .tiny-img {
+      margin-top: 20px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    #inputSection {
+      display: none;
+      margin-top: 10px;
+    }
+
+    input {
+      background: transparent;
+      color: #0000ff;
+      border: 1px solid #555;
+      padding: 5px;
+      width: 200px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #000000;
+      border: 1px solid #9400d3;
+      color: #9400d3;
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="centered">
+    <h1>Eu sei quem você é, DESTINADO.</h1>
+    <h2>+ Bem Vindo +</h2>
+
+    <p class="purple">+OTSSPASESE+</p>
+    <p>"A resposta está nos sons dos degraus. Mas não conte quantos — ouça o que são."</p>
+    <p>"Cada som repetido guarda a resposta da chave."</p>
+    <p>"A chave começa com S e termina com S."</p>
+
+    <img src="zz.gif" alt="símbolo" class="tiny-img" onclick="startAudioAndReveal()" />
+
+    <div id="inputSection">
+      <input type="text" id="codeInput" placeholder="Digite a chave">
+      <button onclick="checkCode()">Enviar</button>
+    </div>
+  </div>
+
+  <audio id="bg-audio" loop muted>
+    <source src="Watchers-mind.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    function startAudioAndReveal() {
+      const audio = document.getElementById('bg-audio');
+      audio.muted = false;
+      audio.play().catch(err => {
+        console.log("Erro ao tocar áudio:", err);
+      });
+      document.getElementById('inputSection').style.display = 'block';
+    }
+
+    function checkCode() {
+      const input = document.getElementById('codeInput').value.trim().toUpperCase();
+      if (input === 'SETEPASSOS') {
+        window.location.href = "transmission.html";
+      } else {
+        alert("Chave incorreta.");
+      }
+    }
+  </script>
+</body>
+</html>
