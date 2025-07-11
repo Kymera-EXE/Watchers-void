@@ -13,31 +13,40 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      position: relative;
+      color: #00ffcc;
+      font-family: monospace;
     }
 
     #glitch-img {
-      width: auto;
-      height: auto;
       max-width: 90vw;
       max-height: 90vh;
       cursor: pointer;
       animation: subtle-glitch 1s infinite alternate;
-      filter: hue-rotate(130deg) saturate(150%) brightness(0.9); /* Verde-marinho */
+      filter: hue-rotate(130deg) saturate(150%) brightness(0.9);
+      transition: transform 0.1s;
     }
 
     @keyframes subtle-glitch {
       0% {
         transform: translate(0, 0);
-        filter: hue-rotate(130deg) saturate(150%) brightness(0.9);
       }
       50% {
         transform: translate(0.5px, -0.3px);
-        filter: hue-rotate(130deg) saturate(150%) brightness(1);
       }
       100% {
         transform: translate(0, 0);
-        filter: hue-rotate(130deg) saturate(150%) brightness(0.9);
       }
+    }
+
+    #message {
+      position: absolute;
+      bottom: 30px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 1s;
+      text-align: center;
+      padding: 0 20px;
     }
 
     audio {
@@ -48,6 +57,8 @@
 <body>
   <img id="glitch-img" src="induced-fear.gif" alt="Induced Fear" />
 
+  <div id="message">Porque tão surpreso? Você sente medo. Todos sentimos.</div>
+
   <audio id="fear-audio">
     <source src="fear.wav" type="audio/wav">
     Seu navegador não suporta áudio.
@@ -56,10 +67,32 @@
   <script>
     const gif = document.getElementById("glitch-img");
     const audio = document.getElementById("fear-audio");
+    const message = document.getElementById("message");
+
+    let clickCount = 0;
 
     gif.addEventListener("click", () => {
       audio.currentTime = 0;
       audio.play().catch(() => {});
+      clickCount++;
+
+      // Mostrar mensagem ao clicar 3 vezes
+      if (clickCount === 3) {
+        message.style.opacity = 1;
+      }
+
+      // Aumentar tremor progressivo a partir do 4º clique
+      if (clickCount >= 4 && clickCount < 12) {
+        const intensity = Math.min((clickCount - 3) * 1.2, 12); // intensidade aumenta com os cliques
+        const offsetX = (Math.random() - 0.5) * intensity;
+        const offsetY = (Math.random() - 0.5) * intensity;
+        gif.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${(Math.random() - 0.5) * intensity}deg)`;
+      }
+
+      // Ao atingir o 12º clique, volta para a página inicial
+      if (clickCount >= 12) {
+        window.location.href = "dream.html";
+      }
     });
   </script>
 </body>
