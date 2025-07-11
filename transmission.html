@@ -84,14 +84,19 @@
       "Registros Comprometidos: Ricardo_00 / Isabela_Δ / Alex_Σ",
       "",
       "Status: [AGUARDANDO AUTORIZAÇÃO DE DESCIDA]",
-      "Pressione [Y] para prosseguir ou [N] para recusar."
+      "Prosseguir? Y/N"
     ];
 
     const container = document.getElementById("text-container");
     let lineIndex = 0, charIndex = 0;
+    let typingFinished = false;
 
     function typeWriter() {
-      if (lineIndex >= lines.length) return;
+      if (lineIndex >= lines.length) {
+        typingFinished = true;
+        return;
+      }
+
       const currentLine = lines[lineIndex];
       if (charIndex < currentLine.length) {
         const span = document.createElement("span");
@@ -106,6 +111,7 @@
         charIndex = 0;
         setTimeout(typeWriter, 100);
         if (lineIndex === lines.length) {
+          // Ativa escuta de teclas após última linha
           document.addEventListener("keydown", handleKeyPress);
         }
       }
@@ -122,6 +128,7 @@
 
     window.onload = typeWriter;
 
+    // Autoplay workaround
     window.addEventListener('click', () => {
       const audio = document.getElementById('bg-audio');
       if (audio.paused) {
