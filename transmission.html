@@ -50,6 +50,21 @@
     #revealSection {
       display: none;
       margin-top: 20px;
+      animation: subtle-glitch 1s infinite alternate;
+    }
+
+    #revealSection p, #revealSection a {
+      display: block;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      color: #00008b;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    a.purple {
+      text-decoration: none;
+      margin-top: 10px;
     }
 
     audio {
@@ -60,6 +75,7 @@
 <body>
   <div id="content">
     <div id="text-container"></div>
+
     <div id="revealSection">
       <p class="red">[NOME INACESSÍVEL]</p>
       <p>⚠ Este canal está sob proteção do Protocolo W-A-T</p>
@@ -88,12 +104,13 @@
     ];
 
     const container = document.getElementById("text-container");
-    let lineIndex = 0, charIndex = 0;
-    let typingFinished = false;
+    const reveal = document.getElementById("revealSection");
+    let lineIndex = 0;
+    let charIndex = 0;
 
     function typeWriter() {
       if (lineIndex >= lines.length) {
-        typingFinished = true;
+        document.addEventListener("keydown", handleKeyPress);
         return;
       }
 
@@ -110,20 +127,34 @@
         lineIndex++;
         charIndex = 0;
         setTimeout(typeWriter, 100);
-        if (lineIndex === lines.length) {
-          // Ativa escuta de teclas após última linha
-          document.addEventListener("keydown", handleKeyPress);
-        }
       }
     }
 
     function handleKeyPress(e) {
       if (e.key.toLowerCase() === 'y') {
-        document.getElementById("revealSection").style.display = "block";
-      }
-      if (e.key.toLowerCase() === 'n') {
+        revealWithTypingEffect();
+      } else if (e.key.toLowerCase() === 'n') {
         window.location.href = "index.html";
       }
+    }
+
+    function revealWithTypingEffect() {
+      const elements = Array.from(reveal.children);
+      reveal.style.display = "block";
+
+      let i = 0;
+      function showNext() {
+        if (i >= elements.length) return;
+        elements[i].style.opacity = 0;
+        elements[i].style.transition = "opacity 0.6s ease";
+        setTimeout(() => {
+          elements[i].style.opacity = 1;
+          i++;
+          showNext();
+        }, 400);
+      }
+
+      showNext();
     }
 
     window.onload = typeWriter;
