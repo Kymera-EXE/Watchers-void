@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>+DREAM+</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: #cc0000;
+      font-family: monospace;
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #content {
+      max-width: 800px;
+      text-align: left;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      animation: subtle-glitch 1s infinite alternate;
+    }
+
+    @keyframes subtle-glitch {
+      0%   { text-shadow: 0 0 0.3px #cc0000; transform: translate(0, 0); }
+      50%  { text-shadow: 0.5px 0.5px 1px #cc0000; transform: translate(0.2px, -0.2px); }
+      100% { text-shadow: 0 0 0.3px #cc0000; transform: translate(0, 0); }
+    }
+
+    .char {
+      opacity: 0;
+      animation: appear 0.5s forwards;
+    }
+
+    @keyframes appear {
+      to {
+        opacity: 1;
+      }
+    }
+
+    a {
+      color: #cc0000;
+      text-decoration: none;
+    }
+
+    #hidden-link {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      font-size: 4px;
+      opacity: 0.01;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="content">
+    <div id="text-container"></div>
+    <a id="hidden-link" href="collision.html">.</a>
+  </div>
+
+  <audio id="bg-audio" autoplay loop>
+    <source src="telladream.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    const rawText = `
+Eu me lembro de cada um. Tinha:
+Uma coruja negra, imóvel, com olhos vermelhos e uma cruz vermelha desenhada no peito.
+Um cachorro grande, assustador, mas solitário. Tinha chifres bem tortos e olhos queimados por ácido.
+Um gavião albino, com os olhos preto como o vazio, e as pontas das asas escurecidas como carvão.
+Um coelho preto, com o rosto todo escuro menos os olhos — círculos brancos ao redor, como se estivesse sempre chorando.
+Um gato Siames, tinha 6 patas e estava sentado como um rei, olhos vermelhos fixos em mim, e um relógio como coleira, marcando <a href="171717.html">17h17m17s</a>.
+Um morcego de quatro asas, pendurado no altar, dormindo. Mas sei que ele me via.
+E um corvo vermelho, tinha duas cabeças, uma grasnava sem parar e a outra me encarava, como se soubesse quem eu sou.
+No centro, o broto de uma árvore, com folhas douradas. Brilhava como se o resto da sala não existisse.
+Eu sempre ficava ali, olhando tudo em silêncio.
+`;
+
+    const container = document.getElementById("text-container");
+    let i = 0;
+
+    function typeChar() {
+      if (i < rawText.length) {
+        const span = document.createElement("span");
+        span.classList.add("char");
+
+        // Se encontrar <a ...> insere direto como HTML
+        if (rawText[i] === '<') {
+          const end = rawText.indexOf('>', i) + 1;
+          const tag = rawText.slice(i, end);
+          container.innerHTML += tag;
+          i = end;
+          setTimeout(typeChar, 10);
+        } else {
+          span.innerHTML = rawText[i] === '\n' ? '<br>' : rawText[i];
+          container.appendChild(span);
+          i++;
+          setTimeout(typeChar, 10);
+        }
+      }
+    }
+
+    window.onload = typeChar;
+
+    window.addEventListener('click', () => {
+      const audio = document.getElementById('bg-audio');
+      if (audio.paused) {
+        audio.play().catch(() => {});
+      }
+    });
+  </script>
+</body>
+</html>
