@@ -4,168 +4,148 @@
   <meta charset="UTF-8">
   <title>+TRANSMISSION+</title>
   <style>
+    /* reset + background */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      color: #00008b;
-      font-family: monospace;
-      font-size: 12px;
+      background: #000;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
       overflow: hidden;
+      font-family: monospace;
     }
 
+    /* container central */
     #content {
       max-width: 700px;
       padding: 20px;
-      text-align: left;
+      color: #00008b;           /* azul escuro */
       white-space: pre-wrap;
       line-height: 1.6;
       animation: subtle-glitch 1s infinite alternate;
     }
 
+    /* glitch geral */
     @keyframes subtle-glitch {
       0%   { text-shadow: 0 0 0.3px #ccc; transform: translate(0, 0); }
       50%  { text-shadow: 0.5px 0.5px 1px #9400d3; transform: translate(0.2px, -0.2px); }
       100% { text-shadow: 0 0 0.3px #ccc; transform: translate(0, 0); }
     }
 
+    /* chars que aparecem*/
     .char {
       opacity: 0;
       animation: appear 0.5s forwards;
     }
+    @keyframes appear { to { opacity: 1; } }
 
-    @keyframes appear {
-      to {
-        opacity: 1;
-      }
-    }
-
+    /* cores especiais */
     .purple { color: #9400d3; }
-    .red { color: #cc0000; }
+    .red    { color: #cc0000; }
 
-    #revealSection {
-      display: none;
-      margin-top: 20px;
-      animation: subtle-glitch 1s infinite alternate;
-    }
-
-    #revealSection p, #revealSection a {
-      display: block;
-      white-space: pre-wrap;
-      line-height: 1.6;
-      color: #00008b;
-      font-family: monospace;
-      font-size: 12px;
-    }
-
-    a.purple {
-      text-decoration: none;
-      margin-top: 10px;
-    }
-
-    audio {
-      display: none;
-    }
+    /* o reveal parte usa mesmíssimo container */
+    #revealSection { display: none; }
   </style>
 </head>
 <body>
   <div id="content">
     <div id="text-container"></div>
-
-    <div id="revealSection">
-      <p class="red">[NOME INACESSÍVEL]</p>
-      <p>⚠ Este canal está sob proteção do Protocolo W-A-T</p>
-      <p>⚠ Rastreamento de origens cognitivas em andamento...</p>
-      <p class="purple">⍜ Você sempre me viu.<br>⍜ Você não se lembra?</p>
-      <a href="dream.html" class="purple">+ Dream +</a>
-    </div>
   </div>
 
   <audio id="bg-audio" autoplay loop>
     <source src="unconftransmission.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
   </audio>
 
   <script>
-    const lines = [
-      "///---=== TRANSMISSION RECEIVED ===---\\\\\\n",
-      "ID: A-∴-VIGIA-77\\n",
-      "Sinal: ♁ 14°52’N, 75°03’E",
-      "Frequência de ruído: Estável",
-      "Anomalia Observada: “SELETORES REM”",
-      "Registros Comprometidos: Ricardo_00 / Isabela_Δ / Alex_Σ",
-      "",
-      "Status: [AGUARDANDO AUTORIZAÇÃO DE DESCIDA]",
-      "Prosseguir? Y/N"
-    ];
+  const introLines = [
+    "///---=== TRANSMISSION RECEIVED ===---\\\\\\n",
+    "ID: A-∴-VIGIA-77\\n",
+    "Sinal: ♁ 14°52’N, 75°03’E",
+    "Frequência de ruído: Estável",
+    "Anomalia Observada: “SELETORES REM”",
+    "Registros Comprometidos: Ricardo_00 / Isabela_Δ / Alex_Σ",
+    "",
+    "Status: [AGUARDANDO AUTORIZAÇÃO DE DESCIDA]",
+    "Prosseguir? Y/N"
+  ];
 
-    const container = document.getElementById("text-container");
-    const reveal = document.getElementById("revealSection");
-    let lineIndex = 0;
-    let charIndex = 0;
+  const revealLines = [
+    "[NOME INACESSÍVEL]\\n",
+    "⚠ Este canal está sob proteção do Protocolo W-A-T\\n",
+    "⚠ Rastreamento de origens cognitivas em andamento...\\n",
+    "⍜ Você sempre me viu.\\n",
+    "⍜ Você não se lembra?\\n",
+    "+ Dream +"
+  ];
 
-    function typeWriter() {
-      if (lineIndex >= lines.length) {
-        document.addEventListener("keydown", handleKeyPress);
+  const container = document.getElementById("text-container");
+  let phase = 'intro';
+  let lines = introLines;
+  let ln=0, ch=0;
+
+  function typeWriter() {
+    if (ln >= lines.length) {
+      // fim desta fase: escuta Y/N
+      document.addEventListener("keydown", onKey);
+      return;
+    }
+    const line = lines[ln];
+    if (ch < line.length) {
+      const span = document.createElement("span");
+      span.classList.add("char");
+      span.textContent = line[ch] === '\\n' ? '' : line[ch];
+      // se for Dream, adiciona link e classe purple
+      if (phase==='reveal' && ln === lines.length-1) {
+        const a = document.createElement("a");
+        a.href = "dream.html";
+        a.textContent = "+ Dream +";
+        a.className = "purple";
+        container.appendChild(a);
+        ln++; ch=0;
+        setTimeout(typeWriter, 400);
         return;
       }
-
-      const currentLine = lines[lineIndex];
-      if (charIndex < currentLine.length) {
-        const span = document.createElement("span");
-        span.classList.add("char");
-        span.textContent = currentLine[charIndex] === '\\n' ? '\n' : currentLine[charIndex];
-        container.appendChild(span);
-        charIndex++;
-        setTimeout(typeWriter, 20);
-      } else {
-        container.appendChild(document.createElement("br"));
-        lineIndex++;
-        charIndex = 0;
-        setTimeout(typeWriter, 100);
+      // cores especiais
+      if (phase==='reveal') {
+        if (ln===0) span.classList.add("red");      // nome inacessível
+        else if (ln>=3&&ln<=4) span.classList.add("purple"); // frases finais
       }
+      container.appendChild(span);
+      ch++;
+      setTimeout(typeWriter, 25);
+    } else {
+      container.appendChild(document.createElement("br"));
+      ln++; ch=0;
+      setTimeout(typeWriter, 150);
     }
+  }
 
-    function handleKeyPress(e) {
-      if (e.key.toLowerCase() === 'y') {
-        revealWithTypingEffect();
-      } else if (e.key.toLowerCase() === 'n') {
-        window.location.href = "index.html";
-      }
+  function onKey(e) {
+    if (e.key.toLowerCase()==='y' && phase==='intro') {
+      // limpa e parte reveal
+      document.removeEventListener("keydown", onKey);
+      phase='reveal';
+      lines = revealLines;
+      ln=0; ch=0;
+      // small gap
+      container.appendChild(document.createElement("br"));
+      container.appendChild(document.createElement("br"));
+      typeWriter();
     }
-
-    function revealWithTypingEffect() {
-      const elements = Array.from(reveal.children);
-      reveal.style.display = "block";
-
-      let i = 0;
-      function showNext() {
-        if (i >= elements.length) return;
-        elements[i].style.opacity = 0;
-        elements[i].style.transition = "opacity 0.6s ease";
-        setTimeout(() => {
-          elements[i].style.opacity = 1;
-          i++;
-          showNext();
-        }, 400);
-      }
-
-      showNext();
+    if (e.key.toLowerCase()==='n') {
+      window.location.href = "index.html";
     }
+  }
 
-    window.onload = typeWriter;
-
-    // Autoplay workaround
-    window.addEventListener('click', () => {
-      const audio = document.getElementById('bg-audio');
-      if (audio.paused) {
-        audio.play().catch(() => {});
-      }
+  window.onload = () => {
+    typeWriter();
+    // autoplay hack
+    window.addEventListener('click',()=>{
+      const a=document.getElementById('bg-audio');
+      if(a.paused) a.play().catch(()=>{});
     });
+  };
   </script>
 </body>
 </html>
