@@ -47,18 +47,8 @@
     .purple { color: #9400d3; }
     .red { color: #cc0000; }
 
-    button {
-      background-color: #000;
-      border: 1px solid #9400d3;
-      color: #9400d3;
-      padding: 4px 10px;
-      font-size: 11px;
-      cursor: pointer;
-      margin: 5px;
-      margin-top: 15px;
-    }
-
-    #buttons, #revealSection {
+    #revealSection {
+      display: none;
       margin-top: 20px;
     }
 
@@ -70,18 +60,12 @@
 <body>
   <div id="content">
     <div id="text-container"></div>
-
-    <div id="buttons" style="display:none;">
-      <button onclick="deny()">N</button>
-      <button onclick="reveal()">Y</button>
-    </div>
-
-    <div id="revealSection" style="display:none;">
+    <div id="revealSection">
       <p class="red">[NOME INACESSÍVEL]</p>
       <p>⚠ Este canal está sob proteção do Protocolo W-A-T</p>
       <p>⚠ Rastreamento de origens cognitivas em andamento...</p>
       <p class="purple">⍜ Você sempre me viu.<br>⍜ Você não se lembra?</p>
-      <button onclick="nextPage()">+ Dream +</button>
+      <a href="dream.html" class="purple">+ Dream +</a>
     </div>
   </div>
 
@@ -100,24 +84,19 @@
       "Registros Comprometidos: Ricardo_00 / Isabela_Δ / Alex_Σ",
       "",
       "Status: [AGUARDANDO AUTORIZAÇÃO DE DESCIDA]",
-      "+ Prosseguir? +"
+      "Pressione [Y] para prosseguir ou [N] para recusar."
     ];
 
     const container = document.getElementById("text-container");
     let lineIndex = 0, charIndex = 0;
 
     function typeWriter() {
-      if (lineIndex >= lines.length) {
-        document.getElementById("buttons").style.display = "block";
-        return;
-      }
-
+      if (lineIndex >= lines.length) return;
       const currentLine = lines[lineIndex];
       if (charIndex < currentLine.length) {
         const span = document.createElement("span");
         span.classList.add("char");
-        span.style.animationDelay = "0s";
-        span.textContent = currentLine[charIndex] === '\\n' ? '\\n' : currentLine[charIndex];
+        span.textContent = currentLine[charIndex] === '\\n' ? '\n' : currentLine[charIndex];
         container.appendChild(span);
         charIndex++;
         setTimeout(typeWriter, 20);
@@ -126,30 +105,29 @@
         lineIndex++;
         charIndex = 0;
         setTimeout(typeWriter, 100);
+        if (lineIndex === lines.length) {
+          document.addEventListener("keydown", handleKeyPress);
+        }
+      }
+    }
+
+    function handleKeyPress(e) {
+      if (e.key.toLowerCase() === 'y') {
+        document.getElementById("revealSection").style.display = "block";
+      }
+      if (e.key.toLowerCase() === 'n') {
+        window.location.href = "index.html";
       }
     }
 
     window.onload = typeWriter;
 
-    // Áudio autoplay workaround
     window.addEventListener('click', () => {
       const audio = document.getElementById('bg-audio');
       if (audio.paused) {
         audio.play().catch(() => {});
       }
     });
-
-    function reveal() {
-      document.getElementById("revealSection").style.display = "block";
-    }
-
-    function deny() {
-      window.location.href = "index.html";
-    }
-
-    function nextPage() {
-      window.location.href = "dream.html";
-    }
   </script>
 </body>
 </html>
